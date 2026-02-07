@@ -4,10 +4,17 @@
 
 const express = require("express")
 const noteModel = require("./models/note.model")
+const cors = require("cors")
+const path = require("path")
 
 
 const app = express()
+app.use(cors())//cross origin wale website ko allow karta h jaise ek website se dusre website pe jane dega
 app.use(express.json()) //middleware hai jiski help se req.body me data ayega
+/*
+    http://localhost:3000/assets/index-BEOHPkKP.js
+ */
+app.use(express.static("./public"))
 
 /*
     Post /api/notes
@@ -68,6 +75,13 @@ app.patch("/api/notes/:id", async (req, res) =>{
     res.status(200).json({
         message: "Note updated successfully"
     })
+})
+
+console.log(__dirname);
+
+
+app.use("*name",(req, res)=>{//"*" is called wild card - ye un api ko handle karega jo hamne create nhi kiya hai 
+    res.sendFile(path.join(__dirname,"..","/public/index.html"))//(..)src se bahar nikalne ke liye
 })
 
 module.exports = app
